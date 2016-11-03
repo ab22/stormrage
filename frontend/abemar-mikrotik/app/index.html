@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<title>Abemar</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
+
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="static/bower_components/sweetalert/dist/sweetalert.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<script type="text/javascript" src="http://fgnass.github.io/spin.js/spin.min.js"></script>
+
+		<!-- build:css(app) static/styles/vendor.css -->
+			<!-- bower:css -->
+			<link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+			<link rel="stylesheet" href="static/bower_components/ngToast/dist/ngToast.css" />
+			<link rel="stylesheet" href="static/bower_components/sweetalert/dist/sweetalert.css" />
+			<!-- endbower -->
+
+			<link rel="stylesheet" href="static/styles/main.css" />
+			<link rel="stylesheet" href="static/styles/home.css" />
+			<link rel="stylesheet" href="static/styles/login.css" />
+			<link rel="stylesheet" href="static/styles/profile.css" />
+		<!-- endbuild -->
+
+		<!-- build:js(app) static/scripts/vendor.js -->
+
+			<!-- bower:js -->
+			<script src="static/bower_components/angular/angular.js"></script>
+			<script src="static/bower_components/angular-animate/angular-animate.js"></script>
+			<script src="static/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+			<script src="static/bower_components/angular-cookies/angular-cookies.js"></script>
+			<script src="static/bower_components/angular-resource/angular-resource.js"></script>
+			<script src="static/bower_components/angular-route/angular-route.js"></script>
+			<script src="static/bower_components/angular-sanitize/angular-sanitize.js"></script>
+			<script src="static/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+			<script src="static/bower_components/jquery/dist/jquery.js"></script>
+			<script src="static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+			<script src="static/bower_components/ngToast/dist/ngToast.js"></script>
+			<script src="static/bower_components/spin.js/spin.js"></script>
+			<script src="static/bower_components/angular-spinner/angular-spinner.js"></script>
+			<script src="static/bower_components/angular-loading-spinner/angular-loading-spinner.js"></script>
+			<script src="static/bower_components/angular-smart-table/dist/smart-table.js"></script>
+			<script src="static/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+			<!-- endbower -->
+
+		<!-- endbuild -->
+	</head>
+	<body>
+		<toast></toast>
+		<span us-spinner="{radius:25, width:8, length: 16, color: '#337AB7'}"></span>
+		<div ui-view></div>
+
+		<!-- build:js(app) static/scripts/app.js -->
+			<script src="static/scripts/app.js"></script>
+			<script src="static/scripts/routes.js"></script>
+
+			<script src="static/scripts/controllers/layout.js"></script>
+			<script src="static/scripts/controllers/home.js"></script>
+			<script src="static/scripts/controllers/login.js"></script>
+			<script src="static/scripts/controllers/configuration.js"></script>
+			<script src="static/scripts/controllers/my_profile.js"></script>
+			<script src="static/scripts/controllers/users/all.js"></script>
+			<script src="static/scripts/controllers/users/create.js"></script>
+			<script src="static/scripts/controllers/users/edit.js"></script>
+			<script src="static/scripts/controllers/users/change_password_modal.js"></script>
+			<script src="static/scripts/controllers/users/change_email_modal.js"></script>
+			<script src="static/scripts/controllers/users/change_full_name_modal.js"></script>
+			<script src="static/scripts/controllers/common_modals/confirmation_modal.js"></script>
+			<script src="static/scripts/controllers/students/all.js"></script>
+			<script src="static/scripts/controllers/students/create.js"></script>
+			<script src="static/scripts/controllers/students/edit.js"></script>
+
+			<script src="static/scripts/directives/resizable_window.js"></script>
+
+			<script src="static/scripts/services/api.js"></script>
+			<script src="static/scripts/services/auth.js"></script>
+			<script src="static/scripts/services/user.js"></script>
+			<script src="static/scripts/services/role.js"></script>
+			<script src="static/scripts/services/student.js"></script>
+		<!-- endbuild -->
+	</body>
+</html>

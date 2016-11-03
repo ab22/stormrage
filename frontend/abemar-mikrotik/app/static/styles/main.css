@@ -1,0 +1,63 @@
+body {
+	background-color: #FFFFFF;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
+}
+
+/*
+	Helper classes
+*/
+
+.has-error .form-control {
+	border-color: #f35051;
+}
+
+.pbottom10 {
+	padding-bottom: 10px;
+}
+
+.pbottom30 {
+	padding-bottom: 30px;
+}
+
+.gray-border-bottom {
+	border-bottom: 1px #EEE solid;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+/*
+	Tables
+*/
+
+.table thead {
+	background-color: #337ab7;
+	color: white;
+}
+
+.table thead tr th,
+.table tbody {
+	text-align: center;
+}
+
+.st-sort-ascent:after{
+	content: '\25BC';
+}
+
+.st-sort-descent:after{
+	content: '\25B2';
+}
+
+/*
+	Forms
+*/
+
+.form-bordered {
+	border: 1px solid #E6E7E8;
+	padding: 20px 25px;
+	border-radius: 5px;
+	float: none;
+	maring: 20px 0px 40px;
+}

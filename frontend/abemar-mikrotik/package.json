@@ -1,0 +1,29 @@
+{
+  "name": "abemar-mikrotik",
+  "version": "0.0.1",
+  "description": "",
+  "engines": {
+    "npm": "2.14.x",
+    "node": "4.2.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-htmlmin": "^2.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-filerev": "^2.3.1",
+    "grunt-jscs": "^3.0.1",
+    "grunt-text-replace": "^0.4.0",
+    "grunt-usemin": "^3.1.1",
+    "grunt-wiredep": "^3.0.1"
+  }
+}
