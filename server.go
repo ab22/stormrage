@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,11 +13,13 @@ import (
 	"github.com/ab22/stormrage/handlers/httputils"
 	"github.com/ab22/stormrage/routes"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 )
 
 type Server struct {
-	cfg    *config.Config
-	router *mux.Router
+	cfg         *config.Config
+	router      *mux.Router
+	cookieStore *sessions.CookieStore
 }
 
 func NewServer() (*Server, error) {
@@ -27,18 +31,19 @@ func NewServer() (*Server, error) {
 	log.Println("Configuring server...")
 	server.cfg, err = config.New()
 	server.cfg.Print()
-
 	if err != nil {
 		return nil, err
 	}
 
+	log.Println("Configuring router...")
 	err = server.configureRouter()
-
 	if err != nil {
 		return nil, err
 	}
 
+	log.Println("Creating static file server...")
 	server.createStaticFilesServer()
+	server.configureCookieStore()
 
 	return server, nil
 }
@@ -59,6 +64,7 @@ func (s *Server) configureRouter() error {
 	}
 
 	s.bindRoutes(r.HTMLRoutes, false)
+	s.bindRoutes(r.APIRoutes, true)
 
 	return nil
 }
@@ -103,14 +109,23 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 	return func(w http.ResponseWriter, r *http.Request) error {
 		var (
 			handler           = route.HandlerFunc()
+			ctx               = r.Context()
 			commonMiddlewares = []handlers.MiddlewareFunc{
 				handlers.HandleHTTPError,
 				handlers.GzipContent,
 			}
 		)
 
+		ctx = context.WithValue(ctx, "cookieStore", s.cookieStore)
+		ctx = context.WithValue(ctx, "config", s.cfg)
+		r = r.WithContext(ctx)
+
 		for _, middleware := range commonMiddlewares {
 			handler = middleware(handler)
+		}
+
+		if route.RequiresAuth() {
+			handler = handlers.ValidateAuth(handler)
 		}
 
 		return handler(w, r)
@@ -141,6 +156,11 @@ func (s *Server) createStaticFilesServer() {
 	}
 
 	httpHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, "cookieStore", s.cookieStore)
+		ctx = context.WithValue(ctx, "config", s.cfg)
+		r = r.WithContext(ctx)
+
 		err := handler(w, r)
 
 		if err != nil {
@@ -152,4 +172,15 @@ func (s *Server) createStaticFilesServer() {
 	s.router.
 		PathPrefix("/static/").
 		Handler(http.StripPrefix("/static", httpHandler))
+}
+
+// configureCookieStore creates the cookie store used to validate user
+// sessions.
+func (s *Server) configureCookieStore() {
+	secretKey := s.cfg.Secret
+
+	gob.Register(&handlers.SessionData{})
+
+	s.cookieStore = sessions.NewCookieStore([]byte(secretKey))
+	s.cookieStore.MaxAge(0)
 }
