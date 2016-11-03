@@ -11,9 +11,8 @@
 			$scope.authenticate = function() {
 				Auth.login($scope.credentials).success(function() {
 					$location.path('/home');
-				}).error(function(response) {
+				}).error(function(response, code) {
 					$scope.credentials.password = '';
-
 					var message = response;
 
 					ngToast.create({

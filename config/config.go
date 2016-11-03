@@ -19,6 +19,15 @@ type Config struct {
 	FrontendAppPath   string
 	SessionCookieName string
 	SessionLifeTime   time.Duration
+
+	DB struct {
+		Host     string `env:"DB_HOST" envDefault:"localhost"`
+		Port     int    `env:"DB_PORT" envDefault:"5432"`
+		User     string `env:"DB_USER" envDefault:"postgres"`
+		Password string `env:"DB_PASS" envDefault:"1234"`
+		Name     string `env:"DB_NAME" envDefault:"abemar"`
+		LogMode  bool   `env:"DB_LOG_MODE" envDefault:"False"`
+	}
 }
 
 // NewConfig initializes a new Config structure.
@@ -58,6 +67,26 @@ func (c *Config) Validate() error {
 		return fmt.Errorf(errorMsg, "Secret")
 	}
 
+	if c.DB.Host == "" {
+		return fmt.Errorf(errorMsg, "DB.Host")
+	}
+
+	if c.DB.Port == 0 {
+		return fmt.Errorf(errorMsg, "DB.Port")
+	}
+
+	if c.DB.User == "" {
+		return fmt.Errorf(errorMsg, "DB.User")
+	}
+
+	if c.DB.Password == "" {
+		return fmt.Errorf(errorMsg, "DB.Password")
+	}
+
+	if c.DB.Name == "" {
+		return fmt.Errorf(errorMsg, "DB.Name")
+	}
+
 	return nil
 }
 
@@ -68,5 +97,9 @@ func (c *Config) Print() {
 	log.Println("-Stormrage Project")
 	log.Println("         Host URL:", c.HostURL)
 	log.Println(" Application Port:", c.Port)
+	log.Println("    Database Host:", c.DB.Host)
+	log.Println("    Database Port:", c.DB.Port)
+	log.Println("    Database Name:", c.DB.Name)
+	log.Println("      Db Log mode:", c.DB.LogMode)
 	log.Println("----------------------------------")
 }

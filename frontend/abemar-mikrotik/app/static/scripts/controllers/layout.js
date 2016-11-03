@@ -6,6 +6,13 @@
 			$scope.window = {};
 			$scope.isCollapsed = true;
 
+			function onLoad() {
+				var option = determineActiveOption();
+				setActiveOption(option);
+
+				generateTopMenu();
+			}
+
 			$scope.signOut = function() {
 				Auth.logout().success(function() {
 					$location.path('/login');
@@ -20,8 +27,20 @@
 						label: 'Inicio',
 						icon: 'fa-home',
 						link: '/main/home',
-						responsiveOnly: false,
-					}
+						responsiveOnly: true,
+					},
+					{
+						label: 'Clientes',
+						icon: 'fa-user',
+						link: '/main/home',
+						responsiveOnly: true,
+					},
+					{
+						label: 'Bloqueados',
+						icon: 'fa-user-times',
+						link: '/main/home',
+						responsiveOnly: true,
+					},
 				],
 				[
 					{
@@ -85,13 +104,6 @@
 
 			function generateTopMenu() {
 				$scope.topMenu = $scope.menu[0].concat($scope.menu[1]);
-			}
-
-			function onLoad() {
-				var option = determineActiveOption();
-				setActiveOption(option);
-
-				generateTopMenu();
 			}
 
 			onLoad();

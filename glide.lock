@@ -1,5 +1,5 @@
-hash: 765c01ff2ab05cad94c44a9f83268e84f0c54d0585785aa0a13158571265854c
-updated: 2016-11-03T13:05:09.269627271-06:00
+hash: 7ed8202d629fd2c8cb1511123e9bc87d5de03f9b6f29185424afe7dfaab9ee77
+updated: 2016-11-03T16:37:06.061431542-06:00
 imports:
 - name: github.com/ab22/env
   version: 0183982f1cdef209f9401fa29adcd6251cd7bd05
@@ -11,4 +11,13 @@ imports:
   version: fa5329f913702981df43dcb2a380bac429c810b5
 - name: github.com/gorilla/sessions
   version: ca9ada44574153444b00d3fd9c8559e4cc95f896
+- name: github.com/jinzhu/gorm
+  version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
+- name: github.com/jinzhu/inflection
+  version: 74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff
+- name: golang.org/x/crypto
+  version: 9477e0b78b9ac3d0b03822fd95422e2fe07627cd
+  subpackages:
+  - bcrypt
+  - blowfish
 testImports: []

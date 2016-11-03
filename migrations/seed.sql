@@ -16,7 +16,7 @@ INSERT INTO users(
 	'admin@abemar.com',
 	'Administrador',
 	'Administrador',
-	0,
+	1,
 	timezone('UTC', now()),
 	timezone('UTC', now())
 )

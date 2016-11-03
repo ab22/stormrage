@@ -14,12 +14,16 @@ import (
 	"github.com/ab22/stormrage/routes"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"github.com/jinzhu/gorm"
+
+	_ "github.com/lib/pq"
 )
 
 type Server struct {
 	cfg         *config.Config
 	router      *mux.Router
 	cookieStore *sessions.CookieStore
+	db          *gorm.DB
 }
 
 func NewServer() (*Server, error) {
@@ -35,9 +39,14 @@ func NewServer() (*Server, error) {
 		return nil, err
 	}
 
+	log.Println("Configuring database...")
+	err = server.createDatabaseConnection()
+	if err = server.createDatabaseConnection(); err != nil {
+		return nil, err
+	}
+
 	log.Println("Configuring router...")
-	err = server.configureRouter()
-	if err != nil {
+	if err = server.configureRouter(); err != nil {
 		return nil, err
 	}
 
@@ -55,9 +64,41 @@ func (s *Server) ListenAndServe() error {
 	)
 }
 
+// createDatabaseConn creates a new GORM database with the specified database
+// configuration.
+func (s *Server) createDatabaseConnection() error {
+	var (
+		err              error
+		dbCfg            = s.cfg.DB
+		connectionString = fmt.Sprintf(
+			"host=%v port=%v user=%v password=%v dbname=%v sslmode=disable",
+			dbCfg.Host,
+			dbCfg.Port,
+			dbCfg.User,
+			dbCfg.Password,
+			dbCfg.Name,
+		)
+	)
+
+	s.db, err = gorm.Open("postgres", connectionString)
+	if err != nil {
+		return err
+	}
+
+	err = s.db.DB().Ping()
+	if err != nil {
+		return err
+	}
+
+	s.db.DB().SetMaxIdleConns(10)
+	s.db.LogMode(dbCfg.LogMode)
+
+	return nil
+}
+
 func (s *Server) configureRouter() error {
 	s.router = mux.NewRouter().StrictSlash(true)
-	r, err := routes.NewRoutes(s.cfg)
+	r, err := routes.NewRoutes(s.cfg, s.db)
 
 	if err != nil {
 		return err

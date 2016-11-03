@@ -4,7 +4,7 @@
 	angular.module('app').config(['$stateProvider', '$urlRouterProvider',
 		function($stateProvider, $urlRouterProvider) {
 			var viewsPath = 'static/views/';
-			$urlRouterProvider.otherwise('/login');
+			$urlRouterProvider.otherwise('/main/home');
 
 			$stateProvider.
 				state('main', {
