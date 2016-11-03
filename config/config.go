@@ -14,6 +14,7 @@ type Config struct {
 	Secret            string `env:"SECRET_KEY" envDefault:"SOME-VERY-SECRET-AND-RANDOM-KEY"`
 	Port              int    `env:"PORT" envDefault:"1337"`
 	Env               string `env:"ENV" envDefault:"DEV"`
+	HostURL           string `env:"HOST_URL" envDefault:"http://localhost:1337/"`
 	SessionCookieName string
 	SessionLifeTime   time.Duration
 }
@@ -54,6 +55,7 @@ func (c *Config) Validate() error {
 func (c *Config) Print() {
 	log.Println("----------------------------------")
 	log.Println("-Stormrage Project")
+	log.Println("         Host URL:", c.HostURL)
 	log.Println(" Application Port:", c.Port)
 	log.Println("----------------------------------")
 }

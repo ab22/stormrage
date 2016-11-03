@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"bitbucket.org/ab2_2/playcheck/config"
-	"bitbucket.org/ab2_2/playcheck/handlers/httputils"
+	"github.com/ab22/stormrage/config"
+	"github.com/ab22/stormrage/handlers/httputils"
 	"github.com/gorilla/sessions"
 )
 
@@ -155,7 +155,7 @@ func ForceSSL(h httputils.HandlerFunc) httputils.HandlerFunc {
 
 		if isNotHTTPS {
 			if isGet {
-				http.Redirect(w, r, cfg.App.HostURL, http.StatusMovedPermanently)
+				http.Redirect(w, r, cfg.HostURL, http.StatusMovedPermanently)
 			} else {
 				http.Error(w, "Unsafe connection not allowed!", http.StatusBadRequest)
 			}

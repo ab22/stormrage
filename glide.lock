@@ -1,5 +1,5 @@
-hash: 99b7d19ed1e052ca58c62d09c5b9b3733bb0704a9da0abc6b4e3d1672032fcbc
-updated: 2016-11-03T10:55:45.698119757-06:00
+hash: 765c01ff2ab05cad94c44a9f83268e84f0c54d0585785aa0a13158571265854c
+updated: 2016-11-03T13:05:09.269627271-06:00
 imports:
 - name: github.com/ab22/env
   version: 0183982f1cdef209f9401fa29adcd6251cd7bd05
@@ -7,4 +7,8 @@ imports:
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux
   version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+- name: github.com/gorilla/securecookie
+  version: fa5329f913702981df43dcb2a380bac429c810b5
+- name: github.com/gorilla/sessions
+  version: ca9ada44574153444b00d3fd9c8559e4cc95f896
 testImports: []
