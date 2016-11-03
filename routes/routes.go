@@ -13,9 +13,9 @@ type Routes struct {
 
 // NewRoutes creates a new Router instance and initializes all HTML
 // and API Routes.
-func NewRoutes(_ *config.Config) (*Routes, error) {
+func NewRoutes(cfg *config.Config) (*Routes, error) {
 	var (
-		staticHandler = static.NewHandler()
+		staticHandler = static.NewHandler(cfg)
 	)
 
 	return &Routes{

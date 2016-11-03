@@ -1,9 +1,6 @@
 package static
 
-import (
-	"fmt"
-	"net/http"
-)
+import "net/http"
 
 // IndexHandler handles request for the index static file.
 //
@@ -17,7 +14,12 @@ func (h *handler) IndexHandler(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	fmt.Fprintf(w, "<h1>Abemar</h1><br /><b>/</b>")
+	err := h.cachedTemplates.ExecuteTemplate(w, "index.html", nil)
+
+	if err != nil {
+		http.Error(w, "<h1>HTTP 500: Internal Server Error</h1>", http.StatusInternalServerError)
+		return err
+	}
 
 	return nil
 }

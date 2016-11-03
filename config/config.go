@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"path"
 	"time"
 
 	"github.com/ab22/env"
@@ -15,6 +16,7 @@ type Config struct {
 	Port              int    `env:"PORT" envDefault:"1337"`
 	Env               string `env:"ENV" envDefault:"DEV"`
 	HostURL           string `env:"HOST_URL" envDefault:"http://localhost:1337/"`
+	FrontendAppPath   string
 	SessionCookieName string
 	SessionLifeTime   time.Duration
 }
@@ -33,6 +35,15 @@ func New() (*Config, error) {
 	if err := cfg.Validate(); err != nil {
 		return nil, err
 	}
+
+	var frontendFolder string
+	if cfg.Env == "DEV" {
+		frontendFolder = "app"
+	} else {
+		frontendFolder = "dist"
+	}
+
+	cfg.FrontendAppPath = path.Join("frontend/abemar-mikrotik", frontendFolder)
 
 	return cfg, nil
 }

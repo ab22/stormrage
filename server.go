@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path"
 
 	"github.com/ab22/stormrage/config"
 	"github.com/ab22/stormrage/handlers"
@@ -36,6 +37,8 @@ func NewServer() (*Server, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	server.createStaticFilesServer()
 
 	return server, nil
 }
@@ -112,4 +115,41 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 
 		return handler(w, r)
 	}
+}
+
+// createStaticFilesServer creates a static file server to serve all of the
+// frontend files(html, js, css, etc).
+func (s *Server) createStaticFilesServer() {
+	var (
+		staticFilesPath   = path.Join(s.cfg.FrontendAppPath, "static")
+		commonMiddlewares = []handlers.MiddlewareFunc{
+			handlers.HandleHTTPError,
+			handlers.GzipContent,
+			//handlers.NoDirListing,
+		}
+	)
+
+	handler := func(w http.ResponseWriter, r *http.Request) error {
+		file := path.Join(staticFilesPath, r.URL.Path)
+
+		http.ServeFile(w, r, file)
+		return nil
+	}
+
+	for _, middleware := range commonMiddlewares {
+		handler = middleware(handler)
+	}
+
+	httpHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		err := handler(w, r)
+
+		if err != nil {
+			log.Printf("static file handler [%s][%s] returned error: %s", r.Method, r.URL.Path, err)
+			httputils.WriteError(w, http.StatusInternalServerError, "")
+		}
+	})
+
+	s.router.
+		PathPrefix("/static/").
+		Handler(http.StripPrefix("/static", httpHandler))
 }
