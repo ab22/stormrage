@@ -181,7 +181,7 @@ func (s *Server) createStaticFilesServer() {
 		commonMiddlewares = []handlers.MiddlewareFunc{
 			handlers.HandleHTTPError,
 			handlers.GzipContent,
-			//handlers.NoDirListing,
+			handlers.NoDirListing,
 		}
 	)
 

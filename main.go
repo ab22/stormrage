@@ -7,7 +7,7 @@ func main() {
 
 	s, err := NewServer()
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 
 	log.Println("Listening...")
