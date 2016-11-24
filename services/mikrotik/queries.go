@@ -12,7 +12,7 @@ func (s *service) RequestClients() ([]models.Client, error) {
 
 	for _, pair := range res.SubPairs {
 		clients = append(clients, models.Client{
-			ID:             pair["id"],
+			ID:             pair[".id"],
 			Name:           pair["name"],
 			Target:         pair["target"],
 			MaxLimit:       pair["max-limit"],
