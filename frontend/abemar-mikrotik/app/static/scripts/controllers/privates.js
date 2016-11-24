@@ -1,7 +1,7 @@
 ; (function(angular) {
     'use strict';
 
-    angular.module('app.controllers').controller('HomeCtrl', ['$scope', 'Mikrotik', 'StrUtils',
+    angular.module('app.controllers').controller('PrivatesCtrl', ['$scope', 'Mikrotik', 'StrUtils',
         function($scope, Mikrotik, StrUtils) {
             $scope.clients = [];
             $scope.rowCollection = [];
@@ -39,8 +39,6 @@
             $scope.reloadClients = function() {
                 requestClients();
             };
-
-            requestClients();
         }
     ]);
 })(angular);
