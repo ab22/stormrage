@@ -1,8 +1,8 @@
-;(function(angular) {
+; (function (angular) {
 	'use strict';
 
-	angular.module('app.controllers').controller('MainLayoutCtrl', ['$scope','$location', 'Auth',
-		function($scope, $location, Auth) {
+	angular.module('app.controllers').controller('MainLayoutCtrl', ['$scope', '$location', 'Auth',
+		function ($scope, $location, Auth) {
 			$scope.window = {};
 			$scope.isCollapsed = true;
 
@@ -13,8 +13,13 @@
 				generateTopMenu();
 			}
 
-			$scope.signOut = function() {
-				Auth.logout().success(function() {
+			$scope.onNavbarToggle = function () {
+				$scope.isCollapsed = !$scope.isCollapsed;
+				console.log('Is collapsed:', $scope.isCollapsed);
+			};
+
+			$scope.signOut = function () {
+				Auth.logout().success(function () {
 					$location.path('/login');
 				});
 			};
@@ -55,7 +60,7 @@
 
 			function hideResponsiveMenu() {
 				if ($scope.isResponsiveMode()) {
-					$scope.isCollapsed = !$scope.isCollapsed;
+					$scope.isCollapsed = true;
 				}
 			}
 
@@ -63,7 +68,7 @@
 				$scope.activeOption = option;
 			}
 
-			$scope.optionOnClick = function(option) {
+			$scope.optionOnClick = function (option) {
 				hideResponsiveMenu();
 
 				if (typeof option.onClick !== 'undefined') {
@@ -74,11 +79,11 @@
 				setActiveOption(option);
 			};
 
-			$scope.isResponsiveMode = function() {
+			$scope.isResponsiveMode = function () {
 				return $scope.window.width <= 767;
 			};
 
-			$scope.showResponsiveOption = function(option) {
+			$scope.showResponsiveOption = function (option) {
 				var showResponsive = !option.responsiveOnly || (option.responsiveOnly && $scope.isResponsiveMode());
 
 				return showResponsive;
