@@ -5,7 +5,7 @@
 <button ng-click="reloadClients()">Reload Clients</button>
 <div class="row">
 	<div class="col-sm-12 table-responsive">
-		<table class="table table-bordered table-striped table-hover" st-table="clients" st-safe-src="rowCollection">
+		<table class="table table-bordered table-striped table-hover clients-table" st-table="clients" st-safe-src="rowCollection">
 			<thead>
 				<tr>
 					<th colspan="12">
@@ -43,7 +43,11 @@
 				<tr ng-repeat="c in clients">
 					<td>{{c.id}}</td>
 					<td>{{c.name}}</td>
-					<td>{{c.target}}</td>
+					<td>
+						<div class="row" ng-repeat="t in c.target">
+							{{t}}
+						</div>
+					</td>
 					<td>{{c.max_limit}}</td>
 					<td>{{c.burst_limit}}</td>
 					<td>{{c.burst_threshold}}</td>

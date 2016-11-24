@@ -7,7 +7,14 @@
 
             function requestClients() {
                 Mikrotik.getClients().success(function (response) {
-                    $scope.clients = response;
+                    response.forEach(function (element) {
+
+                    }, this);
+
+                    $scope.clients = response.map(function (client) {
+                        client.target = client.target.split(',')
+                        return client;
+                    });
                 });
             }
 
