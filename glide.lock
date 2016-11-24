@@ -1,5 +1,5 @@
-hash: 7ed8202d629fd2c8cb1511123e9bc87d5de03f9b6f29185424afe7dfaab9ee77
-updated: 2016-11-03T16:37:06.061431542-06:00
+hash: 36d00a34169dde97fde91e71db363aa91bb28c5c72440e15b1ad03b7ab920696
+updated: 2016-11-24T12:47:57.092629683-06:00
 imports:
 - name: github.com/ab22/env
   version: 0183982f1cdef209f9401fa29adcd6251cd7bd05
@@ -11,10 +11,18 @@ imports:
   version: fa5329f913702981df43dcb2a380bac429c810b5
 - name: github.com/gorilla/sessions
   version: ca9ada44574153444b00d3fd9c8559e4cc95f896
+- name: github.com/gorilla/websocket
+  version: 1f512fc3f05332ba7117626cdfb4e07474e58e60
+- name: github.com/jda/routeros-api-go
+  version: b127babdd0862e4f4bc9c624af73bd39e2bf6b83
 - name: github.com/jinzhu/gorm
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
 - name: github.com/jinzhu/inflection
   version: 74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff
+- name: github.com/lib/pq
+  version: d8eeeb8bae8896dd8e1b7e514ab0d396c4f12a1b
+  subpackages:
+  - oid
 - name: golang.org/x/crypto
   version: 9477e0b78b9ac3d0b03822fd95422e2fe07627cd
   subpackages:

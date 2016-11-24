@@ -13,3 +13,6 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - bcrypt
+- package: github.com/gorilla/websocket
+  version: ~1.0.0
+- package: github.com/jda/routeros-api-go

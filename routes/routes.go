@@ -3,10 +3,12 @@ package routes
 import (
 	"github.com/ab22/stormrage/config"
 	"github.com/ab22/stormrage/handlers/auth"
+	"github.com/ab22/stormrage/handlers/mikrotik"
 	"github.com/ab22/stormrage/handlers/static"
 	"github.com/jinzhu/gorm"
 
 	authservices "github.com/ab22/stormrage/services/auth"
+	mikrotikservices "github.com/ab22/stormrage/services/mikrotik"
 	userservices "github.com/ab22/stormrage/services/user"
 )
 
@@ -20,11 +22,13 @@ type Routes struct {
 // and API Routes.
 func NewRoutes(cfg *config.Config, db *gorm.DB) (*Routes, error) {
 	var (
-		userService = userservices.NewService(db)
-		authService = authservices.NewService(db, userService)
+		userService     = userservices.NewService(db)
+		authService     = authservices.NewService(db, userService)
+		mikrotikService = mikrotikservices.NewService(cfg)
 
-		staticHandler = static.NewHandler(cfg)
-		authHandler   = auth.NewHandler(authService, cfg)
+		staticHandler   = static.NewHandler(cfg)
+		authHandler     = auth.NewHandler(authService, cfg)
+		mikrotikHandler = mikrotik.NewHandler(mikrotikService)
 	)
 
 	return &Routes{
@@ -54,6 +58,12 @@ func NewRoutes(cfg *config.Config, db *gorm.DB) (*Routes, error) {
 				method:       "POST",
 				handlerFunc:  authHandler.Logout,
 				requiresAuth: false,
+			},
+			&route{
+				pattern:      "mikrotik/getClients/",
+				method:       "POST",
+				handlerFunc:  mikrotikHandler.GetClients,
+				requiresAuth: true,
 			},
 		},
 	}, nil

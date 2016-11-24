@@ -1,16 +1,16 @@
-;(function(angular) {
+; (function (angular) {
 	'use strict';
 
-	angular.module('app.services').factory('Api', [function() {
-			var api = {};
+	angular.module('app.services').factory('Api', [function () {
+		var api = {};
 
-			api.getRoute = function(route) {
-				var url = 'api/';
+		api.getRoute = function (route) {
+			var url = 'api/';
 
-				return url + route;
-			};
+			return url + route;
+		};
 
-			return api;
-		}
+		return api;
+	}
 	]);
 })(angular);

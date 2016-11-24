@@ -34,10 +34,11 @@ func NewServer() (*Server, error) {
 
 	log.Println("Configuring server...")
 	server.cfg, err = config.New()
-	server.cfg.Print()
 	if err != nil {
 		return nil, err
 	}
+
+	server.cfg.Print()
 
 	log.Println("Configuring database...")
 	err = server.createDatabaseConnection()

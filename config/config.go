@@ -28,6 +28,13 @@ type Config struct {
 		Name     string `env:"DB_NAME" envDefault:"abemar"`
 		LogMode  bool   `env:"DB_LOG_MODE" envDefault:"False"`
 	}
+
+	PrivateRouter struct {
+		Address  string `env:"PR_ADDR"`
+		Port     string `env:"PR_PORT" envDefault:"8728"`
+		User     string `env:"PR_USER"`
+		Password string `env:"PR_PASS"`
+	}
 }
 
 // NewConfig initializes a new Config structure.
@@ -67,6 +74,7 @@ func (c *Config) Validate() error {
 		return fmt.Errorf(errorMsg, "Secret")
 	}
 
+	// DB validation.
 	if c.DB.Host == "" {
 		return fmt.Errorf(errorMsg, "DB.Host")
 	}
@@ -87,6 +95,23 @@ func (c *Config) Validate() error {
 		return fmt.Errorf(errorMsg, "DB.Name")
 	}
 
+	// Private Router config validation.
+	if c.PrivateRouter.Address == "" {
+		return fmt.Errorf(errorMsg, "PrivateRouter.Address")
+	}
+
+	if c.PrivateRouter.Port == "" {
+		return fmt.Errorf(errorMsg, "PrivateRouter.Port")
+	}
+
+	if c.PrivateRouter.User == "" {
+		return fmt.Errorf(errorMsg, "PrivateRouter.User")
+	}
+
+	if c.PrivateRouter.Password == "" {
+		return fmt.Errorf(errorMsg, "PrivateRouter.Password")
+	}
+
 	return nil
 }
 
@@ -95,11 +120,13 @@ func (c *Config) Validate() error {
 func (c *Config) Print() {
 	log.Println("----------------------------------")
 	log.Println("-Stormrage Project")
-	log.Println("         Host URL:", c.HostURL)
-	log.Println(" Application Port:", c.Port)
-	log.Println("    Database Host:", c.DB.Host)
-	log.Println("    Database Port:", c.DB.Port)
-	log.Println("    Database Name:", c.DB.Name)
-	log.Println("      Db Log mode:", c.DB.LogMode)
+	log.Println("            Host URL:", c.HostURL)
+	log.Println("    Application Port:", c.Port)
+	log.Println("       Database Host:", c.DB.Host)
+	log.Println("       Database Port:", c.DB.Port)
+	log.Println("       Database Name:", c.DB.Name)
+	log.Println("         Db Log mode:", c.DB.LogMode)
+	log.Println(" Private Router Addr:", c.PrivateRouter.Address)
+	log.Println(" Private Router Port:", c.PrivateRouter.Port)
 	log.Println("----------------------------------")
 }

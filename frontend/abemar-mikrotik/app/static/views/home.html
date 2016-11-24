@@ -1,3 +1,62 @@
 <h1 class="page-header">
 	<i class="fa fa-home fa-lg"></i> Inicio
 </h1>
+
+<button ng-click="reloadClients()">Reload Clients</button>
+<div class="row">
+	<div class="col-sm-12 table-responsive">
+		<table class="table table-bordered table-striped table-hover" st-table="clients" st-safe-src="rowCollection">
+			<thead>
+				<tr>
+					<th colspan="12">
+						<div class="row">
+							<div class="col-sm-2 pull-left">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-sm btn-default" ng-click="reloadClients()">
+											<i class="fa fa-fw fa-refresh"></i>
+											Refrescar
+										</button>
+								</div>
+							</div>
+							<div class="col-sm-4 pull-right">
+								<div class="input-group">
+									<span class="input-group-addon">
+											<i class="fa fa-fw fa-search"></i>
+										</span>
+									<input type="search" st-search placeholder="Buscar..." class="input-sm form-control" />
+								</div>
+							</div>
+						</div>
+					</th>
+				</tr>
+				<tr>
+					<th class="clickable" st-sort="id">Id</th>
+					<th class="clickable" st-sort="username">Nombre</th>
+					<th class="clickable" st-sort="firstName">IP</th>
+					<th class="clickable" st-sort="lastName">Max Limit</th>
+					<th class="clickable" st-sort="email">Burst Limit</th>
+					<th class="clickable" st-sort="isAdmin">Burst Threshold</th>
+					<th class="clickable" st-sort="isTeacher">Burst Time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="c in clients">
+					<td>{{c.id}}</td>
+					<td>{{c.name}}</td>
+					<td>{{c.target}}</td>
+					<td>{{c.max_limit}}</td>
+					<td>{{c.burst_limit}}</td>
+					<td>{{c.burst_threshold}}</td>
+					<td>{{c.burst_time}}</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="12" class="text-center">
+						<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>
