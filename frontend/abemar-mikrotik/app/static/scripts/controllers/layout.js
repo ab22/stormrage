@@ -13,11 +13,6 @@
 				generateTopMenu();
 			}
 
-			$scope.onNavbarToggle = function () {
-				$scope.isCollapsed = !$scope.isCollapsed;
-				console.log('Is collapsed:', $scope.isCollapsed);
-			};
-
 			$scope.signOut = function () {
 				Auth.logout().success(function () {
 					$location.path('/login');
