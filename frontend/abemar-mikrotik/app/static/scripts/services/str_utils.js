@@ -5,9 +5,11 @@
 		var strUtils = {};
 
 		strUtils.formatBytes = function(bytes, decimals) {
-			if (bytes === 0) {
+			/* jshint ignore:start */
+			if (bytes == 0) {
 				return '0 Bytes';
 			}
+			/* jshint ignore:end */
 
 			decimals = decimals || 0;
 			var k = 1000; // or 1024 for binary
