@@ -154,7 +154,6 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 			ctx               = r.Context()
 			commonMiddlewares = []handlers.MiddlewareFunc{
 				handlers.HandleHTTPError,
-				handlers.GzipContent,
 			}
 		)
 
@@ -164,6 +163,10 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 
 		for _, middleware := range commonMiddlewares {
 			handler = middleware(handler)
+		}
+
+		if route.GzipContent() {
+			handler = handlers.GzipContent(handler)
 		}
 
 		if route.RequiresAuth() {
