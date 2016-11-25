@@ -1,11 +1,11 @@
 ; (function(angular) {
 	'use strict';
 
-	angular.module('app.controllers').controller('PingCtrl', ['$scope',
-		function($scope) {
-			$scope.ws = null;
-			var logObj = $('.log');
+	angular.module('app.controllers').controller('PingCtrl', ['$scope', 'PingService',
+		function($scope, PingService) {
+			$scope.connected = false;
 			$scope.ip = '';
+			var logObj = $('.log');
 
 			function appendToLog(msg) {
 				var d = logObj[0];
@@ -24,13 +24,17 @@
 				logObj.empty();
 			}
 
-			function onConnect() {
+			function onOpen() {
+				$scope.connected = true;
+				$scope.$apply();
+
 				log('> Connection Established!');
 			}
 
 			function onClose() {
-				$scope.ws = null;
+				$scope.connected = false;
 				$scope.$apply();
+
 				log('> Connection Closed!');
 			}
 
@@ -67,40 +71,37 @@
 					ip: ip
 				};
 
-				$scope.ws.send(JSON.stringify(request));
+				PingService.sendJSON(request);
 				log('> Request to ping [' + ip + '] sent...');
 			};
 
 			$scope.StopPing = function() {
 				var request = { option: 1 };
-				$scope.ws.send(JSON.stringify(request));
+				PingService.sendJSON(request);
 			};
 
 			$scope.ClearLog = function() {
 				clearLog();
 			};
 
-			function createWebSocket() {
-				var host = window.location.host;
-				var url = 'ws://' + host + '/api/ws/onConnect/';
+			function connect() {
+				var result = PingService.connect(onOpen, onClose, onMessage, onError);
 
-				$scope.ws = new WebSocket(url);
-				$scope.ws.onopen = onConnect;
-				$scope.ws.onclose = onClose;
-				$scope.ws.onmessage = onMessage;
-				$scope.ws.onerror = onError;
+				if (result === -1) {
+					log('> WebSockets are not supported by this browser!');
+				}
 			}
 
 			$scope.Reconnect = function() {
-				if (!$scope.ws) {
+				if (!$scope.connected) {
 					log('> Reconnecting...');
-					createWebSocket();
+					connect();
 				}
 			};
 
 			function init() {
 				log('> Connecting to server...');
-				createWebSocket();
+				connect();
 			}
 
 			init();

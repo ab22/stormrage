@@ -4,13 +4,13 @@
 <div class="row">
 	<div class="col-sm-12">
 		<input type="text" ng-model="ip" />
-		<a ng-click="Reconnect()" class="btn btn-default" ng-show="!ws">
+		<a ng-click="Reconnect()" class="btn btn-default" ng-hide="connected">
 			Connect To Server
 		</a>
-		<a ng-click="StartPing()" class="btn btn-default" ng-hide="!ws">
+		<a ng-click="StartPing()" class="btn btn-default" ng-show="connected">
 			Start
 		</a>
-		<a ng-click="StopPing()" class="btn btn-default" ng-hide="!ws">
+		<a ng-click="StopPing()" class="btn btn-default" ng-show="connected">
 			Stop
 		</a>
 		<a ng-click="ClearLog()" class="btn btn-default">
