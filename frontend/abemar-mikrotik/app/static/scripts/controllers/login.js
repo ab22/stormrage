@@ -1,17 +1,17 @@
-; (function (angular) {
+;(function(angular) {
 	'use strict';
 
 	angular.module('app.controllers').controller('LoginCtrl', ['$scope', '$location', 'ngToast', 'Auth',
-		function ($scope, $location, ngToast, Auth) {
+		function($scope, $location, ngToast, Auth) {
 			$scope.credentials = {
 				identifier: '',
 				password: ''
 			};
 
-			$scope.authenticate = function () {
-				Auth.login($scope.credentials).success(function () {
+			$scope.authenticate = function() {
+				Auth.login($scope.credentials).success(function() {
 					$location.path('/home');
-				}).error(function (response) {
+				}).error(function(response) {
 					$scope.credentials.password = '';
 					var message = response;
 

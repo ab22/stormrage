@@ -1,10 +1,10 @@
-; (function (angular) {
+; (function(angular) {
 	'use strict';
 
-	angular.module('app.services').factory('Api', [function () {
+	angular.module('app.services').factory('Api', [function() {
 		var api = {};
 
-		api.getRoute = function (route) {
+		api.getRoute = function(route) {
 			var url = 'api/';
 
 			return url + route;
