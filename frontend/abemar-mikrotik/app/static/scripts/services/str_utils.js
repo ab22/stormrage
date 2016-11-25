@@ -7,7 +7,7 @@
 		strUtils.formatBytes = function(bytes, decimals) {
 			/* jshint ignore:start */
 			if (bytes == 0) {
-				return '0 Bytes';
+				return '0';
 			}
 			/* jshint ignore:end */
 
