@@ -20,12 +20,12 @@ A few environment variables must be set in order to run the application correctl
 The required env variables are:
 
 - SECRET
-- SMTP_HOST
-- SMTP_PASS
-- SMTP_PORT
-- SMTP_USER
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
+- PORT - 1337 by default.
+- ENV - "DEV" by default.
+- PR_ADDR
+- PR_PORT
+- PR_USER
+- PR_PASS
 
 These variables can be copied from the heroku config variables.
 
