@@ -1,8 +1,8 @@
-; (function(angular) {
+; (function (angular) {
     'use strict';
 
     angular.module('app.controllers').controller('MainLayoutCtrl', ['$scope', '$location', 'Auth',
-        function($scope, $location, Auth) {
+        function ($scope, $location, Auth) {
             $scope.window = {};
             $scope.isCollapsed = true;
 
@@ -13,8 +13,8 @@
                 generateTopMenu();
             }
 
-            $scope.signOut = function() {
-                Auth.logout().success(function() {
+            $scope.signOut = function () {
+                Auth.logout().success(function () {
                     $location.path('/login');
                 });
             };
@@ -33,6 +33,12 @@
                         label: 'IP Privadas',
                         icon: 'fa-users',
                         link: '/main/privadas',
+                        responsiveOnly: true,
+                    },
+                    {
+                        label: 'Ping',
+                        icon: 'fa-users',
+                        link: '/main/ping',
                         responsiveOnly: true,
                     },
                     {
@@ -69,7 +75,7 @@
                 $scope.activeOption = option;
             }
 
-            $scope.optionOnClick = function(option) {
+            $scope.optionOnClick = function (option) {
                 hideResponsiveMenu();
 
                 if (typeof option.onClick !== 'undefined') {
@@ -80,11 +86,11 @@
                 setActiveOption(option);
             };
 
-            $scope.isResponsiveMode = function() {
+            $scope.isResponsiveMode = function () {
                 return $scope.window.width <= 767;
             };
 
-            $scope.showResponsiveOption = function(option) {
+            $scope.showResponsiveOption = function (option) {
                 var showResponsive = !option.responsiveOnly || (option.responsiveOnly && $scope.isResponsiveMode());
 
                 return showResponsive;

@@ -1,0 +1,24 @@
+<h1 class="page-header">
+	<i class="fa fa-users fa-lg"></i> Ping
+</h1>
+<div class="row">
+	<div class="col-sm-12">
+		<input type="text" ng-model="ip" />
+		<a ng-click="Reconnect()" class="btn btn-default" ng-show="!ws">
+			Connect To Server
+		</a>
+		<a ng-click="StartPing()" class="btn btn-default" ng-hide="!ws">
+			Start
+		</a>
+		<a ng-click="StopPing()" class="btn btn-default" ng-hide="!ws">
+			Stop
+		</a>
+		<a ng-click="ClearLog()" class="btn btn-default">
+			Clear
+		</a>
+	</div>
+</div>
+<div class="row log-container">
+	<div class="log col-sm-12">
+	</div>
+</div>

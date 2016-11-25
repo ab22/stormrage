@@ -1,0 +1,13 @@
+.log-container {
+	height: 400px;
+}
+
+.log {
+	background-color: black;
+	color: #10AA10;
+    padding: 10px;
+	overflow-x: auto;
+	max-height: 400px;
+	height: 400px;
+	width: 100%;
+}
