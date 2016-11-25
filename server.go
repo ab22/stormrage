@@ -105,23 +105,18 @@ func (s *Server) configureRouter() error {
 		return err
 	}
 
-	s.bindRoutes(r.HTMLRoutes, false)
-	s.bindRoutes(r.APIRoutes, true)
+	s.bindRoutes(r)
 
 	return nil
 }
 
 // bindRoutes adds all routes to the server's router.
-func (s *Server) bindRoutes(r []routes.Route, apiRoute bool) {
+func (s *Server) bindRoutes(r []routes.Route) {
 	for _, route := range r {
-		var routePath string
-		httpHandler := s.makeHTTPHandler(route)
-
-		if apiRoute {
-			routePath = "/api/" + route.Pattern()
-		} else {
-			routePath = route.Pattern()
-		}
+		var (
+			httpHandler = s.makeHTTPHandler(route)
+			routePath   = "/api/" + route.Pattern()
+		)
 
 		s.router.
 			Methods(route.Method()).
@@ -181,7 +176,7 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 // frontend files(html, js, css, etc).
 func (s *Server) createStaticFilesServer() {
 	var (
-		staticFilesPath   = path.Join(s.cfg.FrontendAppPath, "static")
+		// staticFilesPath   = path.Join(s.cfg.FrontendAppPath, "static")
 		commonMiddlewares = []handlers.MiddlewareFunc{
 			handlers.HandleHTTPError,
 			handlers.GzipContent,
@@ -190,7 +185,7 @@ func (s *Server) createStaticFilesServer() {
 	)
 
 	handler := func(w http.ResponseWriter, r *http.Request) error {
-		file := path.Join(staticFilesPath, r.URL.Path)
+		file := path.Join(s.cfg.FrontendAppPath, r.URL.Path)
 
 		http.ServeFile(w, r, file)
 		return nil
@@ -215,8 +210,8 @@ func (s *Server) createStaticFilesServer() {
 	})
 
 	s.router.
-		PathPrefix("/static/").
-		Handler(http.StripPrefix("/static", httpHandler))
+		PathPrefix("/").
+		Handler(httpHandler)
 }
 
 // configureCookieStore creates the cookie store used to validate user

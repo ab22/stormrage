@@ -1,8 +1,8 @@
 ; (function(angular) {
 	'use strict';
 
-	angular.module('app.controllers').controller('PingCtrl', ['$scope', 'PingService',
-		function($scope, PingService) {
+	angular.module('app.controllers').controller('PingCtrl', ['$scope', 'Auth', 'PingService',
+		function($scope, Auth, PingService) {
 			$scope.connected = false;
 			$scope.ip = '';
 			var logObj = $('.log');
@@ -38,6 +38,7 @@
 			}
 
 			function onError() {
+				Auth.checkAuthentication();
 				log('> An error ocurred!');
 			}
 

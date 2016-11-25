@@ -32,7 +32,13 @@ func NoDirListing(h httputils.HandlerFunc) httputils.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		urlPath := r.URL.Path
 
-		if urlPath == "" || strings.HasSuffix(urlPath, "/") {
+		// If asking for root or /index.html then server it.
+		if urlPath == "/" {
+			return h(w, r)
+		}
+
+		// If asking for another folder that's not root (static/), then respond with a 404.
+		if strings.HasSuffix(urlPath, "/") {
 			http.NotFound(w, r)
 			return nil
 		}
