@@ -20,7 +20,7 @@
                         }
 
                         return values.join('/');
-                    }
+                    };
 
                     $scope.clients = response.map(function(client) {
                         client.target = client.target.split(',');

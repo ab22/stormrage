@@ -1,124 +1,124 @@
 ; (function (angular) {
-    'use strict';
+	'use strict';
 
-    angular.module('app.controllers').controller('MainLayoutCtrl', ['$scope', '$location', 'Auth',
-        function ($scope, $location, Auth) {
-            $scope.window = {};
-            $scope.isCollapsed = true;
+	angular.module('app.controllers').controller('MainLayoutCtrl', ['$scope', '$location', 'Auth',
+		function ($scope, $location, Auth) {
+			$scope.window = {};
+			$scope.isCollapsed = true;
 
-            function onLoad() {
-                var option = determineActiveOption();
-                setActiveOption(option);
+			function setActiveOption(option) {
+				$scope.activeOption = option;
+			}
 
-                generateTopMenu();
-            }
+			function generateTopMenu() {
+				$scope.topMenu = $scope.menu[0].concat($scope.menu[1]);
+			}
 
-            $scope.signOut = function () {
-                Auth.logout().success(function () {
-                    $location.path('/login');
-                });
-            };
+			function determineActiveOption() {
+				var currentPath = $location.path();
 
-            $scope.activeOption = null;
-            $scope.topMenu = [];
-            $scope.menu = [
-                [
-                    {
-                        label: 'Inicio',
-                        icon: 'fa-home',
-                        link: '/main/home',
-                        responsiveOnly: true,
-                    },
-                    {
-                        label: 'IP Privadas',
-                        icon: 'fa-users',
-                        link: '/main/privadas',
-                        responsiveOnly: true,
-                    },
-                    {
-                        label: 'Ping',
-                        icon: 'fa-users',
-                        link: '/main/ping',
-                        responsiveOnly: true,
-                    },
-                    {
-                        label: 'Clientes',
-                        icon: 'fa-user',
-                        link: '/main/home',
-                        responsiveOnly: true,
-                    },
-                    {
-                        label: 'Bloqueados',
-                        icon: 'fa-user-times',
-                        link: '/main/home',
-                        responsiveOnly: true,
-                    },
-                ],
-                [
-                    {
-                        label: 'Cerrar Sesión',
-                        icon: 'fa-sign-out',
-                        link: '',
-                        onClick: $scope.signOut,
-                        responsiveOnly: false,
-                    }
-                ]
-            ];
+				for (var i in $scope.menu) {
+					var options = $scope.menu[i];
 
-            function hideResponsiveMenu() {
-                if ($scope.isResponsiveMode()) {
-                    $scope.isCollapsed = true;
-                }
-            }
+					for (var x in options) {
+						var option = options[x];
 
-            function setActiveOption(option) {
-                $scope.activeOption = option;
-            }
+						if (option.link === currentPath) {
+							return option;
+						}
+					}
+				}
 
-            $scope.optionOnClick = function (option) {
-                hideResponsiveMenu();
+				return null;
+			}
 
-                if (typeof option.onClick !== 'undefined') {
-                    option.onClick();
-                    return;
-                }
+			function onLoad() {
+				var option = determineActiveOption();
+				setActiveOption(option);
 
-                setActiveOption(option);
-            };
+				generateTopMenu();
+			}
 
-            $scope.isResponsiveMode = function () {
-                return $scope.window.width <= 767;
-            };
+			$scope.signOut = function () {
+				Auth.logout().success(function () {
+					$location.path('/login');
+				});
+			};
 
-            $scope.showResponsiveOption = function (option) {
-                var showResponsive = !option.responsiveOnly || (option.responsiveOnly && $scope.isResponsiveMode());
+			$scope.activeOption = null;
+			$scope.topMenu = [];
+			$scope.menu = [
+				[
+					{
+						label: 'Inicio',
+						icon: 'fa-home',
+						link: '/main/home',
+						responsiveOnly: true,
+					},
+					{
+						label: 'IP Privadas',
+						icon: 'fa-users',
+						link: '/main/privadas',
+						responsiveOnly: true,
+					},
+					{
+						label: 'Ping',
+						icon: 'fa-users',
+						link: '/main/ping',
+						responsiveOnly: true,
+					},
+					{
+						label: 'Clientes',
+						icon: 'fa-user',
+						link: '/main/home',
+						responsiveOnly: true,
+					},
+					{
+						label: 'Bloqueados',
+						icon: 'fa-user-times',
+						link: '/main/home',
+						responsiveOnly: true,
+					},
+				],
+				[
+					{
+						label: 'Cerrar Sesión',
+						icon: 'fa-sign-out',
+						link: '',
+						onClick: $scope.signOut,
+						responsiveOnly: false,
+					}
+				]
+			];
 
-                return showResponsive;
-            };
+			function hideResponsiveMenu() {
+				if ($scope.isResponsiveMode()) {
+					$scope.isCollapsed = true;
+				}
+			}
 
-            function determineActiveOption() {
-                var currentPath = $location.path();
+			$scope.optionOnClick = function (option) {
+				hideResponsiveMenu();
 
-                for (var i in $scope.menu) {
-                    var options = $scope.menu[i];
+				if (typeof option.onClick !== 'undefined') {
+					option.onClick();
+					return;
+				}
 
-                    for (var x in options) {
-                        var option = options[x];
+				setActiveOption(option);
+			};
 
-                        if (option.link === currentPath) {
-                            return option;
-                        }
-                    }
-                }
+			$scope.isResponsiveMode = function () {
+				return $scope.window.width <= 767;
+			};
 
-                return null;
-            }
+			$scope.showResponsiveOption = function (option) {
+				var showResponsive = !option.responsiveOnly || (option.responsiveOnly && $scope.isResponsiveMode());
 
-            function generateTopMenu() {
-                $scope.topMenu = $scope.menu[0].concat($scope.menu[1]);
-            }
+				return showResponsive;
+			};
 
-            onLoad();
-        }
-    ]);
+			onLoad();
+		}
+	]);
 })(angular);

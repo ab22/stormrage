@@ -1,109 +1,109 @@
-; (function (angular) {
-	'use strict';
+; (function(angular) {
+    'use strict';
 
-	angular.module('app.controllers').controller('PingCtrl', ['$scope',
-		function ($scope) {
-			$scope.ws = null;
-			var logObj = $(".log");
-			$scope.ip = "";
+    angular.module('app.controllers').controller('PingCtrl', ['$scope',
+        function($scope) {
+            $scope.ws = null;
+            var logObj = $(".log");
+            $scope.ip = "";
 
-			function appendToLog(msg) {
-				var d = logObj[0];
-				var doScroll = d.scrollTop == d.scrollHeight - d.clientHeight;
-				msg.appendTo(logObj);
-				if (doScroll) {
-					d.scrollTop = d.scrollHeight - d.clientHeight;
-				}
-			}
+            function appendToLog(msg) {
+                var d = logObj[0];
+                var doScroll = d.scrollTop === d.scrollHeight - d.clientHeight;
+                msg.appendTo(logObj);
+                if (doScroll) {
+                    d.scrollTop = d.scrollHeight - d.clientHeight;
+                }
+            }
 
-			function log(msg) {
-				appendToLog($("<div/>").text(msg));
-			}
+            function log(msg) {
+                appendToLog($("<div/>").text(msg));
+            }
 
-			function clearLog() {
-				logObj.empty();
-			}
+            function clearLog() {
+                logObj.empty();
+            }
 
-			function createWebSocket() {
-				var host = window.location.host;
-				var url = "ws://" + host + "/api/ws/onConnect/";
+            function onConnect() {
+                log("> Connection Established!");
+            }
 
-				$scope.ws = new WebSocket(url);
-				$scope.ws.onopen = onConnect;
-				$scope.ws.onclose = onClose;
-				$scope.ws.onmessage = onMessage;
-				$scope.ws.onerror = onError;
-			}
+            function onClose() {
+                $scope.ws = null;
+                $scope.$apply();
+                log("> Connection Closed!");
+            }
 
-			function onConnect(evt) {
-				log("> Connection Established!");
-			}
+            function onError() {
+                log("> An error ocurred!");
+            }
 
-			function onClose(evt) {
-				$scope.ws = null;
-				$scope.$apply();
-				log("> Connection Closed!");
-			}
+            function onMessage(evt) {
+                var data = evt.data.replace(/[\u0000-\u0019]+/g, "");
+                var response = JSON.parse(data);
 
-			function onError(evt, data) {
-				log("> An error ocurred!");
-			}
+                if (response.error) {
+                    log(response.error);
+                    return;
+                }
 
-			function onMessage(evt) {
-				var data = evt.data.replace(/[\u0000-\u0019]+/g, "");
-				var response = JSON.parse(data);
+                if (response.payload) {
+                    log(response.payload);
+                    return;
+                }
 
-				if (response.error) {
-					log(response.error);
-					return;
-				}
+                log(evt.data);
+            }
 
-				if (response.payload) {
-					log(response.payload);
-					return;
-				}
+            $scope.StartPing = function() {
+                var ip = $scope.ip.trim();
+                if (!$scope.ip) {
+                    log("> Please enter an IP!");
+                    return;
+                }
 
-				log(evt.data);
-			}
+                var request = {
+                    option: 0,
+                    ip: ip
+                };
 
-			$scope.StartPing = function () {
-				var ip = $scope.ip.trim();
-				if (!$scope.ip) {
-					log("> Please enter an IP!");
-					return;
-				}
+                $scope.ws.send(JSON.stringify(request));
+                log("> Request to ping [" + ip + "] sent...");
+            };
 
-				var request = {
-					option: 0,
-					ip: ip
-				}
+            $scope.StopPing = function() {
+                var request = { option: 1 };
+                $scope.ws.send(JSON.stringify(request));
+            };
 
-				$scope.ws.send(JSON.stringify(request));
-				log("> Request to ping [" + ip + "] sent...");
-			}
+            $scope.ClearLog = function() {
+                clearLog();
+            };
 
-			$scope.StopPing = function () {
-				var request = { option: 1 }
-				$scope.ws.send(JSON.stringify(request));
-			}
+            function createWebSocket() {
+                var host = window.location.host;
+                var url = "ws://" + host + "/api/ws/onConnect/";
 
-			$scope.ClearLog = function () {
-				clearLog();
-			}
+                $scope.ws = new WebSocket(url);
+                $scope.ws.onopen = onConnect;
+                $scope.ws.onclose = onClose;
+                $scope.ws.onmessage = onMessage;
+                $scope.ws.onerror = onError;
+            }
 
-			$scope.Reconnect = function () {
-				if (!$scope.ws) {
-					log("> Reconnecting...");
-					createWebSocket();
-				}
-			}
+            $scope.Reconnect = function() {
+                if (!$scope.ws) {
+                    log("> Reconnecting...");
+                    createWebSocket();
+                }
+            };
 
-			function init() {
-				log("> Connecting to server...");
-				createWebSocket();
-			}
+            function init() {
+                log("> Connecting to server...");
+                createWebSocket();
+            }
 
-			init();
-		}
-	]);
+            init();
+        }
+    ]);
 })(angular);
