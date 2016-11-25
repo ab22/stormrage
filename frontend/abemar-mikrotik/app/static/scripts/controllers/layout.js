@@ -63,7 +63,7 @@
 					},
 					{
 						label: 'Ping',
-						icon: 'fa-users',
+						icon: 'fa-terminal',
 						link: '/main/ping',
 						responsiveOnly: true
 					},

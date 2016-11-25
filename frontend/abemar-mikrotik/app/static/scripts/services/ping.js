@@ -7,15 +7,40 @@
 				ws: null
 			};
 
-			pingService.connect = function(onOpen, onClose, onMessage, onError) {
-				// WebSockets not supported by browser. Abort.
+			// getState returns the current websocket.readyState.
+			//
+			// STATES:
+			//         0 - CONNECTING
+			//         1 - CONNECTED
+			//         2 - CLOSING
+			//         3 - CLOSED
+			pingService.getState = function() {
 				if (!window.WebSocket) {
 					return -1;
 				}
 
-				// There's already an active websocket connection open. No need to recreate.
-				if (pingService.ws) {
-					return 0;
+				var ws = pingService.ws;
+
+				// No websocket instance. Assume it's closed.
+				if (!ws) {
+					return 3;
+				}
+
+				// No readyState attribute found on instance. Assume it's closed.
+				if (!ws.readyState && ws.readyState !== 0) {
+					return 3;
+				}
+
+				return ws.readyState;
+			};
+
+			pingService.connect = function(onOpen, onClose, onMessage, onError) {
+				var state = pingService.getState();
+
+				// There's alread an active websocket connection open or websockets are not
+				// supported.
+				if (state <= 1) {
+					return state;
 				}
 
 				var host = window.location.host + '/';

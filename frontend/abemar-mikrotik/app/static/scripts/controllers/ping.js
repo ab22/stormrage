@@ -27,7 +27,6 @@
 			function onOpen() {
 				$scope.connected = true;
 				$scope.$apply();
-
 				log('> Connection Established!');
 			}
 
@@ -98,11 +97,20 @@
 			};
 
 			function connect() {
-				var result = PingService.connect(onOpen, onClose, onMessage, onError);
+				var state = PingService.getState();
 
-				if (result === -1) {
+				if (state === -1) {
 					log('> WebSockets are not supported by this browser!');
+					return;
 				}
+
+				if (state <= 1) {
+					$scope.connected = true;
+					log('> Connection already established!');
+					return;
+				}
+
+				PingService.connect(onOpen, onClose, onMessage, onError);
 			}
 
 			$scope.Reconnect = function() {
