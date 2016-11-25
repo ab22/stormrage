@@ -17,7 +17,7 @@
 			}
 
 			function log(msg) {
-				appendToLog($('<div/>').text(msg));
+				appendToLog($('<div/>').html(msg));
 			}
 
 			function clearLog() {
@@ -43,8 +43,21 @@
 			}
 
 			function onMessage(evt) {
-				var data = evt.data.replace(/[\u0000-\u0019]+/g, '');
-				var response = JSON.parse(data);
+				// Remove all new line characters (\n) or any other non supported JSON char to
+				// prevent JSON.parse from throwing an error.
+				var data = evt.data
+								.replace(/\n/g, '<br />')
+								.replace(/[\u0000-\u0019]+/g, '');
+				var response;
+
+				try {
+					response = JSON.parse(data);
+				} catch (err) {
+					log('> Error parsing data from server!');
+					log('> ' + err);
+					PingService.disconnect();
+					return;
+				}
 
 				if (response.error) {
 					log(response.error);

@@ -8,10 +8,12 @@
 			};
 
 			pingService.connect = function(onOpen, onClose, onMessage, onError) {
+				// WebSockets not supported by browser. Abort.
 				if (!window.WebSocket) {
 					return -1;
 				}
 
+				// There's already an active websocket connection open. No need to recreate.
 				if (pingService.ws) {
 					return 0;
 				}
@@ -39,6 +41,15 @@
 
 				pingService.ws = ws;
 				return 0;
+			};
+
+			pingService.disconnect = function() {
+				if (!pingService.ws) {
+					return;
+				}
+
+				pingService.ws.close();
+				pingService.ws = null;
 			};
 
 			pingService.sendJSON = function(request) {
