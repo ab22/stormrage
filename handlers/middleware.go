@@ -141,34 +141,3 @@ func HandleHTTPError(h httputils.HandlerFunc) httputils.HandlerFunc {
 		return err
 	}
 }
-
-// ForceSSL forces HTTPS on the Heroku production servers.
-//
-// All GET requests will be handled with a redirect to the https HOST URL with
-// a (301)Moved Permanently status code. All POST/PUT/DELETE requests will
-// return an error specifying that a secure connection is required. This is done
-// in order to avoid missing data when performing a redirect from
-// POST -> GET redirects.
-func ForceSSL(h httputils.HandlerFunc) httputils.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) error {
-		var (
-			ctx = r.Context()
-			cfg = ctx.Value("config").(*config.Config)
-
-			isNotHTTPS = r.Header.Get("X-Forwarded-Proto") != "https"
-			isGet      = r.Method == "GET"
-		)
-
-		if isNotHTTPS {
-			if isGet {
-				http.Redirect(w, r, cfg.HostURL, http.StatusMovedPermanently)
-			} else {
-				http.Error(w, "Unsafe connection not allowed!", http.StatusBadRequest)
-			}
-
-			return nil
-		}
-
-		return h(w, r)
-	}
-}
