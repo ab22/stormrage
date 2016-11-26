@@ -4,7 +4,11 @@
 	angular.module('app.services').factory('PingService', ['Api',
 		function(Api) {
 			var pingService = {
-				ws: null
+				ws: null,
+				onOpen: null,
+				onClose: null,
+				onMessage: null,
+				onError: null
 			};
 
 			// getState returns the current websocket.readyState.
@@ -34,7 +38,14 @@
 				return ws.readyState;
 			};
 
-			pingService.connect = function(onOpen, onClose, onMessage, onError) {
+			pingService.setup = function(onOpen, onClose, onMessage, onError) {
+				pingService.onOpen = onOpen;
+				pingService.onClose = onClose;
+				pingService.onMessage = onMessage;
+				pingService.onError = onError;
+			};
+
+			pingService.connect = function() {
 				var state = pingService.getState();
 
 				// There's alread an active websocket connection open or websockets are not
@@ -48,20 +59,29 @@
 				var ws = new WebSocket(url);
 
 				ws.onopen = function(evt) {
-					onOpen(evt);
+					if (pingService.onOpen) {
+						pingService.onOpen(evt);
+					}
 				};
 
 				ws.onclose = function(evt) {
 					pingService.ws = null;
-					onClose(evt);
+
+					if (pingService.onClose) {
+						pingService.onClose(evt);
+					}
 				};
 
 				ws.onmessage = function(evt) {
-					onMessage(evt);
+					if (pingService.onMessage) {
+						pingService.onMessage(evt);
+					}
 				};
 
 				ws.onerror = function(evt) {
-					onError(evt);
+					if (pingService.onError) {
+						pingService.onError(evt);
+					}
 				};
 
 				pingService.ws = ws;
@@ -92,6 +112,30 @@
 				}
 
 				pingService.ws.send(text);
+			};
+
+			pingService.startPing = function(ip) {
+				ip = ip.trim();
+
+				if (!ip) {
+					return -1;
+				}
+
+				var request = {
+					option: 0,
+					ip: ip
+				};
+
+				pingService.sendJSON(request);
+				return 0;
+			};
+
+			pingService.stopPing = function() {
+				var request = {
+					option: 1
+				};
+
+				pingService.sendJSON(request);
 			};
 
 			return pingService;

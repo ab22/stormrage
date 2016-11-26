@@ -2,7 +2,6 @@ package ws
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
 )
 
@@ -33,23 +32,18 @@ func (w *pingWriter) Write(p []byte) (n int, err error) {
 func (w *pingWriter) StartAndWait() {
 	if err := w.cmd.Start(); err != nil {
 		err = fmt.Errorf("error starting command: %v", err)
+
 		w.client.LogError(err)
+		w.client.Write([]byte("An error ocurring when trying to start the command! Aborting..."))
 		return
 	}
 
 	if err := w.cmd.Wait(); err != nil {
 		err = fmt.Errorf("error waiting for command: %v", err)
 		w.client.LogError(err)
-		return
 	}
-
-	log.Println("Ping command ended successfully!")
 }
 
 func (w *pingWriter) Kill() error {
-	if w.cmd == nil {
-		return nil
-	}
-
 	return w.cmd.Process.Kill()
 }

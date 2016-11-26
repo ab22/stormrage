@@ -73,25 +73,16 @@
 			}
 
 			$scope.StartPing = function() {
-				var ip = $scope.ip.trim();
-				if (!$scope.ip) {
+				var result = PingService.startPing($scope.ip);
+				if (result === -1) {
 					log('> Please enter an IP!');
 					return;
 				}
 
-				var request = {
-					option: 0,
-					ip: ip
-				};
-
-				PingService.sendJSON(request);
-				log('> Request to ping [' + ip + '] sent...');
+				log('> Request to ping [' + $scope.ip + '] sent...');
 			};
 
-			$scope.StopPing = function() {
-				var request = { option: 1 };
-				PingService.sendJSON(request);
-			};
+			$scope.StopPing = PingService.stopPing;
 
 			$scope.ClearLog = function() {
 				clearLog();
@@ -111,7 +102,7 @@
 					return;
 				}
 
-				PingService.connect(onOpen, onClose, onMessage, onError);
+				PingService.connect();
 			}
 
 			$scope.Reconnect = function() {
@@ -121,12 +112,29 @@
 				}
 			};
 
-			function init() {
+			// Ctor
+			$scope.$on('$viewContentLoaded', function() {
 				log('> Connecting to server...');
-				connect();
-			}
 
-			init();
+				// If a ping process is running and the user switches views, then the service
+				// will keep the previous instances of the controller's event functions and will
+				// call those event functions when a new response is received from the server,
+				// preventing all responses to be shown on the user's console.
+				//
+				// To avoid this, when the new controller is created, we setup the PingService
+				// with the current functions of this instance.
+				PingService.setup(onOpen, onClose, onMessage, onError);
+
+				connect();
+			});
+
+			// Dtor
+			$scope.$on('$destroy', function() {
+				// In case user switches view without properly stopping an existing process,
+				// we send a stop ping singal. If no process is running, the backend should do
+				// nothing.
+				$scope.StopPing();
+			});
 		}
 	]);
 })(angular);
