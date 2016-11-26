@@ -69,7 +69,6 @@ func (s *websocketServer) OnConnect(w http.ResponseWriter, r *http.Request) erro
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 
 	if err != nil {
-		conn.Close()
 		return err
 	}
 

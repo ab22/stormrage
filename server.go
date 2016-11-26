@@ -59,10 +59,10 @@ func NewServer() (*Server, error) {
 }
 
 func (s *Server) ListenAndServe() error {
-	return http.ListenAndServeTLS(
+	return http.ListenAndServe(
 		fmt.Sprintf(":%d", s.cfg.Port),
-		"keys/server.crt",
-		"keys/server.key",
+		// "keys/server.crt",
+		// "keys/server.key",
 		s.router,
 	)
 }
@@ -157,9 +157,9 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 
 		handler = handlers.HandleHTTPError(handler)
 
-		if route.GzipContent() {
+		/*if route.GzipContent() {
 			handler = handlers.GzipContent(handler)
-		}
+		}*/
 
 		if route.RequiresAuth() {
 			handler = handlers.ValidateAuth(handler)
@@ -176,7 +176,7 @@ func (s *Server) createStaticFilesServer() {
 		// staticFilesPath   = path.Join(s.cfg.FrontendAppPath, "static")
 		commonMiddlewares = []handlers.MiddlewareFunc{
 			handlers.HandleHTTPError,
-			handlers.GzipContent,
+			//handlers.GzipContent,
 			handlers.NoDirListing,
 		}
 	)
