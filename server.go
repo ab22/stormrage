@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"path"
 
 	"github.com/ab22/stormrage/config"
 	"github.com/ab22/stormrage/handlers"
@@ -51,8 +50,6 @@ func NewServer() (*Server, error) {
 		return nil, err
 	}
 
-	log.Println("Creating static file server...")
-	server.createStaticFilesServer()
 	server.configureCookieStore()
 
 	return server, nil
@@ -61,8 +58,6 @@ func NewServer() (*Server, error) {
 func (s *Server) ListenAndServe() error {
 	return http.ListenAndServe(
 		fmt.Sprintf(":%d", s.cfg.Port),
-		// "keys/server.crt",
-		// "keys/server.key",
 		s.router,
 	)
 }
@@ -115,14 +110,11 @@ func (s *Server) configureRouter() error {
 // bindRoutes adds all routes to the server's router.
 func (s *Server) bindRoutes(r []routes.Route) {
 	for _, route := range r {
-		var (
-			httpHandler = s.makeHTTPHandler(route)
-			routePath   = "/api/" + route.Pattern()
-		)
+		httpHandler := s.makeHTTPHandler(route)
 
 		s.router.
 			Methods(route.Method()).
-			Path(routePath).
+			Path(route.Pattern()).
 			HandlerFunc(httpHandler)
 	}
 }
@@ -157,58 +149,12 @@ func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc
 
 		handler = handlers.HandleHTTPError(handler)
 
-		/*if route.GzipContent() {
-			handler = handlers.GzipContent(handler)
-		}*/
-
 		if route.RequiresAuth() {
 			handler = handlers.ValidateAuth(handler)
 		}
 
 		return handler(w, r)
 	}
-}
-
-// createStaticFilesServer creates a static file server to serve all of the
-// frontend files(html, js, css, etc).
-func (s *Server) createStaticFilesServer() {
-	var (
-		// staticFilesPath   = path.Join(s.cfg.FrontendAppPath, "static")
-		commonMiddlewares = []handlers.MiddlewareFunc{
-			handlers.HandleHTTPError,
-			//handlers.GzipContent,
-			handlers.NoDirListing,
-		}
-	)
-
-	handler := func(w http.ResponseWriter, r *http.Request) error {
-		file := path.Join(s.cfg.FrontendAppPath, r.URL.Path)
-
-		http.ServeFile(w, r, file)
-		return nil
-	}
-
-	for _, middleware := range commonMiddlewares {
-		handler = middleware(handler)
-	}
-
-	httpHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		ctx = context.WithValue(ctx, "cookieStore", s.cookieStore)
-		ctx = context.WithValue(ctx, "config", s.cfg)
-		r = r.WithContext(ctx)
-
-		err := handler(w, r)
-
-		if err != nil {
-			log.Printf("static file handler [%s][%s] returned error: %s", r.Method, r.URL.Path, err)
-			httputils.WriteError(w, http.StatusInternalServerError, "")
-		}
-	})
-
-	s.router.
-		PathPrefix("/").
-		Handler(httpHandler)
 }
 
 // configureCookieStore creates the cookie store used to validate user

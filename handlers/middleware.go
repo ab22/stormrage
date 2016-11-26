@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/ab22/stormrage/config"
@@ -19,33 +18,6 @@ import (
 // The idea of a middleware function is to validate/read/modify data before or
 // after calling the next middleware function.
 type MiddlewareFunc func(httputils.HandlerFunc) httputils.HandlerFunc
-
-// NoDirListing helps avoid listing folder directories.
-//
-// Go's http.FileServer by default, lists the directories and files
-// of the specified folder to serve and cannot be disabled.
-// To prevent directory listing, noDirListing checks if the
-// path requests ends in '/'. If it does, then the client is requesting
-// to explore a folder and we return a 404 (Not found), else, we just
-// call the http.Handler passed as parameter.
-func NoDirListing(h httputils.HandlerFunc) httputils.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) error {
-		urlPath := r.URL.Path
-
-		// If asking for root or /index.html then server it.
-		if urlPath == "/" {
-			return h(w, r)
-		}
-
-		// If asking for another folder that's not root (static/), then respond with a 404.
-		if strings.HasSuffix(urlPath, "/") {
-			http.NotFound(w, r)
-			return nil
-		}
-
-		return h(w, r)
-	}
-}
 
 // extendSessionLifetime determines if the session's lifetime needs to be
 // extended. Session's lifetime should be extended only if the session's
@@ -106,24 +78,6 @@ func ValidateAuth(h httputils.HandlerFunc) httputils.HandlerFunc {
 		ctx = context.WithValue(ctx, "sessionData", sessionData)
 		authenticatedRequest := r.WithContext(ctx)
 		return h(w, authenticatedRequest)
-	}
-}
-
-// GzipContent is a middleware function for handlers to encode content to gzip.
-func GzipContent(h httputils.HandlerFunc) httputils.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) error {
-		w.Header().Add("Vary", "Accept-Encoding")
-
-		if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-			return h(w, r)
-		}
-
-		w.Header().Set("Content-Encoding", "gzip")
-
-		gzipResponseWriter := httputils.NewGzipResponseWriter(w)
-		defer gzipResponseWriter.Close()
-
-		return h(gzipResponseWriter, r)
 	}
 }
 

@@ -28,35 +28,35 @@ func NewRoutes(cfg *config.Config, db *gorm.DB) ([]Route, error) {
 	// API routes
 	return []Route{
 		&route{
-			pattern:      "ws/onConnect/",
+			pattern:      "/ws/onConnect/",
 			method:       "GET",
 			handlerFunc:  websocketService.OnConnect,
 			requiresAuth: true,
 			gzipContent:  false,
 		},
 		&route{
-			pattern:      "auth/checkAuthentication/",
+			pattern:      "/auth/checkAuthentication/",
 			method:       "POST",
 			handlerFunc:  authHandler.CheckAuth,
 			requiresAuth: true,
 			gzipContent:  true,
 		},
 		&route{
-			pattern:      "auth/login/",
+			pattern:      "/auth/login/",
 			method:       "POST",
 			handlerFunc:  authHandler.Login,
 			requiresAuth: false,
 			gzipContent:  true,
 		},
 		&route{
-			pattern:      "auth/logout/",
+			pattern:      "/auth/logout/",
 			method:       "POST",
 			handlerFunc:  authHandler.Logout,
 			requiresAuth: false,
 			gzipContent:  true,
 		},
 		&route{
-			pattern:      "mikrotik/getClients/",
+			pattern:      "/mikrotik/getClients/",
 			method:       "POST",
 			handlerFunc:  mikrotikHandler.GetClients,
 			requiresAuth: true,
