@@ -44,7 +44,7 @@
 				}
 
 				var host = window.location.host + '/';
-				var url = 'ws://' + host + Api.getRoute('ws/onConnect/');
+				var url = 'wss://' + host + Api.getRoute('ws/onConnect/');
 				var ws = new WebSocket(url);
 
 				ws.onopen = function(evt) {

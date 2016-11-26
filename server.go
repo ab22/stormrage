@@ -59,8 +59,10 @@ func NewServer() (*Server, error) {
 }
 
 func (s *Server) ListenAndServe() error {
-	return http.ListenAndServe(
+	return http.ListenAndServeTLS(
 		fmt.Sprintf(":%d", s.cfg.Port),
+		"keys/server.crt",
+		"keys/server.key",
 		s.router,
 	)
 }
@@ -145,20 +147,15 @@ func (s *Server) makeHTTPHandler(route routes.Route) http.HandlerFunc {
 func (s *Server) handleWithMiddlewares(route routes.Route) httputils.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		var (
-			handler           = route.HandlerFunc()
-			ctx               = r.Context()
-			commonMiddlewares = []handlers.MiddlewareFunc{
-				handlers.HandleHTTPError,
-			}
+			handler = route.HandlerFunc()
+			ctx     = r.Context()
 		)
 
 		ctx = context.WithValue(ctx, "cookieStore", s.cookieStore)
 		ctx = context.WithValue(ctx, "config", s.cfg)
 		r = r.WithContext(ctx)
 
-		for _, middleware := range commonMiddlewares {
-			handler = middleware(handler)
-		}
+		handler = handlers.HandleHTTPError(handler)
 
 		if route.GzipContent() {
 			handler = handlers.GzipContent(handler)

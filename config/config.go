@@ -126,6 +126,7 @@ func (c *Config) Print() {
 	log.Println("       Database Port:", c.DB.Port)
 	log.Println("       Database Name:", c.DB.Name)
 	log.Println("         Db Log mode:", c.DB.LogMode)
+	log.Println("       Frontend path:", c.FrontendAppPath)
 	log.Println(" Private Router Addr:", c.PrivateRouter.Address)
 	log.Println(" Private Router Port:", c.PrivateRouter.Port)
 	log.Println("----------------------------------")
