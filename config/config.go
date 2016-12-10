@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"log"
-	"path"
 	"time"
 
 	"github.com/ab22/env"
@@ -15,8 +14,6 @@ type Config struct {
 	Secret            string `env:"SECRET_KEY" envDefault:"SOME-VERY-SECRET-AND-RANDOM-KEY"`
 	Port              int    `env:"PORT" envDefault:"1337"`
 	Env               string `env:"ENV" envDefault:"DEV"`
-	HostURL           string `env:"HOST_URL" envDefault:"http://localhost:1337/"`
-	FrontendAppPath   string
 	SessionCookieName string
 	SessionLifeTime   time.Duration
 
@@ -51,15 +48,6 @@ func New() (*Config, error) {
 	if err := cfg.Validate(); err != nil {
 		return nil, err
 	}
-
-	var frontendFolder string
-	if cfg.Env == "DEV" {
-		frontendFolder = "app"
-	} else {
-		frontendFolder = "dist"
-	}
-
-	cfg.FrontendAppPath = path.Join("frontend/abemar-mikrotik", frontendFolder)
 
 	return cfg, nil
 }
@@ -120,13 +108,11 @@ func (c *Config) Validate() error {
 func (c *Config) Print() {
 	log.Println("----------------------------------")
 	log.Println("-Stormrage Project")
-	log.Println("            Host URL:", c.HostURL)
 	log.Println("    Application Port:", c.Port)
 	log.Println("       Database Host:", c.DB.Host)
 	log.Println("       Database Port:", c.DB.Port)
 	log.Println("       Database Name:", c.DB.Name)
 	log.Println("         Db Log mode:", c.DB.LogMode)
-	log.Println("       Frontend path:", c.FrontendAppPath)
 	log.Println(" Private Router Addr:", c.PrivateRouter.Address)
 	log.Println(" Private Router Port:", c.PrivateRouter.Port)
 	log.Println("----------------------------------")
