@@ -8,7 +8,6 @@ type Route interface {
 	Method() string
 	HandlerFunc() func(http.ResponseWriter, *http.Request) error
 	RequiresAuth() bool
-	GzipContent() bool
 }
 
 type route struct {
@@ -16,7 +15,6 @@ type route struct {
 	method       string
 	handlerFunc  func(http.ResponseWriter, *http.Request) error
 	requiresAuth bool
-	gzipContent  bool
 }
 
 func (r *route) Pattern() string {
@@ -33,8 +31,4 @@ func (r *route) HandlerFunc() func(http.ResponseWriter, *http.Request) error {
 
 func (r *route) RequiresAuth() bool {
 	return r.requiresAuth
-}
-
-func (r *route) GzipContent() bool {
-	return r.gzipContent
 }
