@@ -12,7 +12,6 @@
 
 		'smart-table',
 		'ngToast',
-		'ngRoute',
 		'ngSanitize',
 		'ui.router',
 		'ui.bootstrap',
@@ -84,7 +83,7 @@
 				return;
 			}
 
-			Auth.checkAuthentication().error(function(response, status) {
+			Auth.checkAuthentication().then(null, function error(response, status) {
 				if (status === 401) {
 					if (toState.requiresAuthentication) {
 						$state.go('login');

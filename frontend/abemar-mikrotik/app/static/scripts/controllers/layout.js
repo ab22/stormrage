@@ -40,7 +40,7 @@
 			}
 
 			$scope.signOut = function() {
-				Auth.logout().success(function() {
+				Auth.logout().then(function() {
 					$location.path('/login');
 				});
 			};

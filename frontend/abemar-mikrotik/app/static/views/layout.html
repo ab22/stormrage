@@ -15,7 +15,7 @@
 			<div id="navbar" class="navbar-collapse collapse" uib-collapse="isCollapsed">
 				<ul class="nav navbar-nav navbar-right">
 					<li ng-repeat="option in topMenu" ng-show="showResponsiveOption(option)">
-						<a ng-href="#{{option.link}}" ng-click="optionOnClick(option)">
+						<a ng-href="#!{{option.link}}" ng-click="optionOnClick(option)">
 							<i class="fa {{option.icon}} fa-fw"></i>{{option.label}}
 						</a>
 					</li>
@@ -29,7 +29,7 @@
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar" ng-repeat="options in menu">
 					<li ng-repeat="option in options" ng-class="{'active': option.label === activeOption.label}">
-						<a ng-href="#{{option.link}}" ng-click="optionOnClick(option)">
+						<a ng-href="#!{{option.link}}" ng-click="optionOnClick(option)">
 							<i class="fa fa-fw {{option.icon}}"></i> {{option.label}}
 						</a>
 					</li>
