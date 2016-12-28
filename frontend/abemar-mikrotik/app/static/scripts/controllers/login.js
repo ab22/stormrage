@@ -4,7 +4,7 @@
 	angular.module('app.controllers').controller('LoginCtrl', ['$scope', '$location', 'ngToast', 'Auth',
 		function($scope, $location, ngToast, Auth) {
 			$scope.credentials = {
-				identifier: '',
+				username: '',
 				password: ''
 			};
 

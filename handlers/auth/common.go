@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -45,6 +47,13 @@ func (h *handler) Login(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	} else if user == nil {
+		var errorMsg = fmt.Sprintf(
+			"Failed login attempt with user [%s] from IP [%s]",
+			loginForm.Username,
+			r.RemoteAddr,
+		)
+		log.Println(errorMsg)
+
 		httputils.WriteError(w, http.StatusUnauthorized, "Usuario/Clave inválidos!")
 		return nil
 	}
