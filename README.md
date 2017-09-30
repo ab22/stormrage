@@ -42,8 +42,8 @@ go get -u github.com/mattes/migrate
 Console syntax to migrate all queries:
 
 ```shell
-cd github.com/ab22/abcd/
-migrate -url postgres://user:pass@host:port/dbname?sslmode=disable -path ./migrations up
+cd github.com/ab22/stormrage/
+migrate -database postgres://user:pass@host:5432/database?sslmode=disable -path ./migrations up
 sudo -u postgres psql -d abemar -a -f ~/go/src/github.com/ab22/stormrage/migrations/seed.sql
 ```
 
